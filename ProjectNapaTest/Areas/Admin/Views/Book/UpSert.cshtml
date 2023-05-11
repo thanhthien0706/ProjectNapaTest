@@ -1,0 +1,109 @@
+﻿@model BookAdminVM
+
+@{
+    ViewData["Title"] = Model.Book.Id != 0 ? "Update" : "Create";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="card shadow border-0 mt-4">
+    <div class="card-header bg-secondary bg-gradient m-lg-0 puy-3">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h2 class="text-white py-2">@(Model.Book.Id != 0 ? "Update" : "Create") Book</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body p-4">
+        <form method="post" class="row" enctype="multipart/form-data">
+            <input asp-for="Book.Id" type="hidden" />
+            <input asp-for="Book.Thumbnail" type="hidden" />
+            <div class="row">
+                <div class="col-10">
+                    <div class="border p-3">
+                        @*<div asp-validation-summary="All"></div>*@
+                        <div class="form-floating py-2 col-12">
+                            <input asp-for="Book.Title" class="form-control border-0 shadow" />
+                            <label asp-for="Book.Title" class="ms-2"></label>
+                            <span asp-validation-for="Book.Title" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-floating py-2 col-12">
+                            <input asp-for="Book.SubDescription" class="form-control border-0 shadow" />
+                            <label asp-for="Book.SubDescription" class="ms-2"></label>
+                            <span asp-validation-for="Book.SubDescription" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-floating py-2 col-12">
+                            <input asp-for="Book.YearPublished" class="form-control border-0 shadow" />
+                            <label asp-for="Book.YearPublished" class="ms-2"></label>
+                            <span asp-validation-for="Book.YearPublished" class="text-danger"></span>
+                        </div>
+
+                        <div class="py-2 col-12">
+                            <label asp-for="Book.Description" class="ms-2 text-muted"></label>
+                            <textarea asp-for="Book.Description" id="editor-description" class="form-control border-0 shadow"></textarea>
+                        </div>
+
+                        <div class="form-floating py-2 col-12">
+                            <input type="file" name="file" class="form-control border-0 shadow" />
+                            <label asp-for="Book.Thumbnail" class="ms-2"></label>
+                        </div>
+
+                        <div class="form-floating py-2 col-12">
+                            <select asp-for="@Model.Book.CategoryId" asp-items="@Model.CategoryList" class="form-select border-0 shadow">
+                                <option disabled selected>--Select Category--</option>
+                            </select>
+                        </div>
+
+                        <div class="form-floating py-2 col-12">
+                            <select asp-for="@Model.Book.AuthorTId" asp-items="@Model.AuthorList" class="form-select border-0 shadow">
+                                <option disabled selected>--Select Author--</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            @Html.CheckBoxFor(m => m.Book.Published)
+                            @Html.LabelFor(m => m.Book.Published, "Published")
+                        </div>
+
+                        <div class="row pt-2">
+                            <div class="col-6 col-md-3">
+                                <button type="submit" class="btn btn-primary form-control">@(Model.Book.Id != 0 ? "Update" : "Create")</button>
+                            </div>
+                            <div class="col-6 col-md-3">
+                                <a asp-area="Admin" asp-controller="Author" asp-action="Index" class="btn btn-outline-secondary border form-control">Back to list</a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-2">
+                    <img src="@Model.Book.Thumbnail" width="100%"
+                         style="border-radius:5px; border:1px solid #bbb9b9" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    <script>
+        tinymce.init({
+            selector: 'textarea#editor-description',
+            plugins: 'anchor autolink charmap codesample emoticons lists table visualblocks wordcount checklist mediaembed casechange export formatpainter pageembed linkchecker a11ychecker tinymcespellchecker permanentpen powerpaste advtable advcode editimage tinycomments tableofcontents footnotes mergetags autocorrect typography inlinecss',
+            toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent',
+            tinycomments_mode: 'embedded',
+            tinycomments_author: 'Author name',
+            mergetags_list: [
+                { value: 'First.Name', title: 'First Name' },
+                { value: 'Email', title: 'Email' },
+            ]
+        });
+    </script>
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+}

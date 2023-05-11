@@ -7,7 +7,8 @@ using System.Threading.Tasks;
 
 namespace Napa.DataAccess.Repository.IRepository
 {
-    public interface IApplicationUserRepository : IRepository<ApplicationUser>
+    public interface IBookRepository : IRepository<Book>
     {
+        void Update(Book book);
     }
 }

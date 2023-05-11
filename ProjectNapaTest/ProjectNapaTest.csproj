@@ -30,6 +30,7 @@
 	<ItemGroup>
 		<Folder Include="Areas\Identity\Data\" />
 		<Folder Include="Common\Exceptions\" />
+		<Folder Include="wwwroot\images\book\" />
 	</ItemGroup>
 
 </Project>

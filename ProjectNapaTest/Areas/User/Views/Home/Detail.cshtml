@@ -1,0 +1,21 @@
+﻿@model Book
+
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <img src="@Model.Thumbnail" alt="Thumbnail" class="img-fluid rounded">
+        </div>
+        <div class="col-md-8">
+            <h1 class="fw-bold">@Model.Title</h1>
+            <p class="lead mb-4">@Model.SubDescription</p>
+            <h5 class="mb-3">@Html.Raw(Model.Description)</h5>
+            <p class="fw-bold">Author: @Model.Author.Name</p>
+            <p class="fw-bold mb-4">Category: @Model.Category.Title</p>
+            <p class="fw-bold">Year Published: @Model.YearPublished</p>
+        </div>
+    </div>
+</div>

@@ -10,6 +10,6 @@ namespace Napa.Utility
     {
         public const string Role_User = "User";
         public const string Role_Admin = "Admin";
-        public const int Page_Size = 4;
+        public const int Page_Size = 6;
     }
 }

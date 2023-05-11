@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Napa.DataAccess.Data;
 
@@ -11,9 +12,11 @@ using Napa.DataAccess.Data;
 namespace Napa.DataAccess.Migrations
 {
     [DbContext(typeof(DbContextApplication))]
-    partial class DbContextApplicationModelSnapshot : ModelSnapshot
+    [Migration("20230511041815_InitialDatabase")]
+    partial class InitialDatabase
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -265,7 +268,7 @@ namespace Napa.DataAccess.Migrations
                     b.ToTable("Authors");
                 });
 
-            modelBuilder.Entity("Napa.Models.Book", b =>
+            modelBuilder.Entity("Napa.Models.AuthorBook", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -273,11 +276,39 @@ namespace Napa.DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("AuthorTId")
+                    b.Property<int?>("AuthorId")
+                        .IsRequired()
                         .HasColumnType("int");
 
-                    b.Property<int>("CategoryId")
+                    b.Property<int?>("BookId")
+                        .IsRequired()
                         .HasColumnType("int");
+
+                    b.Property<DateTime?>("CreateAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeleteAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("UpdateAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AuthorId");
+
+                    b.HasIndex("BookId");
+
+                    b.ToTable("AuthorBooks");
+                });
+
+            modelBuilder.Entity("Napa.Models.Book", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime?>("CreateAt")
                         .HasColumnType("datetime2");
@@ -288,6 +319,9 @@ namespace Napa.DataAccess.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("ParrenBooktId")
+                        .HasColumnType("int");
 
                     b.Property<bool>("Published")
                         .HasColumnType("bit");
@@ -318,9 +352,7 @@ namespace Napa.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AuthorTId");
-
-                    b.HasIndex("CategoryId");
+                    b.HasIndex("ParrenBooktId");
 
                     b.ToTable("Books");
                 });
@@ -353,6 +385,40 @@ namespace Napa.DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
+                });
+
+            modelBuilder.Entity("Napa.Models.CategoryBook", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("BookId")
+                        .IsRequired()
+                        .HasColumnType("int");
+
+                    b.Property<int?>("CategoryId")
+                        .IsRequired()
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("CreateAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeleteAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("UpdateAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BookId");
+
+                    b.HasIndex("CategoryId");
+
+                    b.ToTable("CategoryBooks");
                 });
 
             modelBuilder.Entity("Napa.Models.ApplicationUser", b =>
@@ -417,11 +483,39 @@ namespace Napa.DataAccess.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Napa.Models.Book", b =>
+            modelBuilder.Entity("Napa.Models.AuthorBook", b =>
                 {
                     b.HasOne("Napa.Models.Author", "Author")
+                        .WithMany("AuthorBooks")
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Napa.Models.Book", "Book")
+                        .WithMany("AuthorBooks")
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Author");
+
+                    b.Navigation("Book");
+                });
+
+            modelBuilder.Entity("Napa.Models.Book", b =>
+                {
+                    b.HasOne("Napa.Models.Book", "ParrentBook")
+                        .WithMany("ChildrenBooks")
+                        .HasForeignKey("ParrenBooktId");
+
+                    b.Navigation("ParrentBook");
+                });
+
+            modelBuilder.Entity("Napa.Models.CategoryBook", b =>
+                {
+                    b.HasOne("Napa.Models.Book", "Book")
                         .WithMany()
-                        .HasForeignKey("AuthorTId")
+                        .HasForeignKey("BookId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -431,9 +525,21 @@ namespace Napa.DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Author");
+                    b.Navigation("Book");
 
                     b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("Napa.Models.Author", b =>
+                {
+                    b.Navigation("AuthorBooks");
+                });
+
+            modelBuilder.Entity("Napa.Models.Book", b =>
+                {
+                    b.Navigation("AuthorBooks");
+
+                    b.Navigation("ChildrenBooks");
                 });
 #pragma warning restore 612, 618
         }

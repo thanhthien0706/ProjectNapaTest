@@ -12,15 +12,18 @@ namespace Napa.DataAccess.Repository
     public class UnitOfWork : IUnitOfWork
     {
         public readonly DbContextApplication _dbContext;
-        public ITestRepository TestRepo { get; private set; }
         public IApplicationUserRepository ApplicationUserRepo { get; private set; }
+        public ICategoryRepository CategoryRepo { get; private set; }
+        public IAuthorRepository AuthorRepo { get; private set; }
+        public IBookRepository BookRepo { get; private set; }
 
         public UnitOfWork(DbContextApplication dbContext)
         {
             _dbContext = dbContext;
-            TestRepo = new TestRepository(_dbContext);
             ApplicationUserRepo = new ApplicationUserRepository(_dbContext);
-
+            CategoryRepo = new CategoryRepository(_dbContext);
+            AuthorRepo = new AuhthorRepository(_dbContext);
+            BookRepo = new BookRepository(_dbContext);
         }
 
         public void Save()

@@ -1,8 +1,54 @@
-﻿@{
+﻿@model X.PagedList.IPagedList<Book>
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+
+<div class="row pb-3">
+    @foreach (Book book in Model)
+    {
+        <div class="col-lg-3 col-sm-6">
+            <div class="row p-2">
+                <div class="col-12 p-1">
+                    <div class="card border-0 p-3 shadow border-top border-top border-5 rounded">
+                        <img src="@book.Thumbnail" class="card-img-top rounded" style="height:300px; object-fit:cover" />
+                        <div class="card-body pb-0">
+                            <div class="pl-1">
+                                <p class="card-title h5 text-dark opacity-75 text-uppercase text-center">@book.Title</p>
+                                <p class="card-title text-warning text-center">By <b>@book.Author.Name</b></p>
+                            </div>
+                            <div class="pl-1">
+                                <p class="text-dark text-opacity-75 text-center pb-0">@book.YearPublished</p>
+                            </div>
+                            <div class="pl-1">
+                                <p class="text-dark text-opacity-75 text-center pb-0">@book.SubDescription</p>
+                            </div>
+                        </div>
+                        <div>
+                            <a asp-area="User" asp-controller="Home" asp-action="Detail" asp-route-id="@book.Id" class="btn btn-primary bg-gradient border-0 form-control">
+                                Details
+                            </a>
+                        </div>
+                        @if (User.IsInRole(SD.Role_Admin))
+                        {
+                            <div class="pt-2">
+                                <a asp-area="Admin" asp-controller="Book" asp-action="Upsert" asp-route-id="@book.Id" class="btn btn-outline-dark bg-gradient border-1 form-control">
+                                    Edit
+                                </a>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    @Html.PagedListPager(
+    Model ,
+    page => Url.Action("Index","Home", new {page  =page}),
+    new PagedListRenderOptions(){
+    LiElementClasses = new List<string> {"page-item"},
+    PageClasses = new string[] { "page-link" }
+    })
 </div>

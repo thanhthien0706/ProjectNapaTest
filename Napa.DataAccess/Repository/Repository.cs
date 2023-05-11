@@ -1,14 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Napa.DataAccess.Data;
+using Napa.DataAccess.Repository.IRepository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
-using UdemyWeb.DataAccess.Repository.IRepository;
 
-namespace UdemyWeb.DataAccess.Repository
+namespace Napa.DataAccess.Repository
 {
     public class Repository<T> : IRepository<T> where T : class
     {
@@ -21,24 +21,24 @@ namespace UdemyWeb.DataAccess.Repository
             this.dbSet = _dbContext.Set<T>();
         }
 
-        public async Task Add(T entity)
+        public void Add(T entity)
         {
-            await dbSet.AddAsync(entity);
+            dbSet.Add(entity);
         }
 
-        public async Task<T?> Get(Expression<Func<T, bool>> filter)
+        public T? Get(Expression<Func<T, bool>> filter)
         {
             IQueryable<T> query = dbSet;
             query = query.Where(filter);
 
-            return await query.FirstOrDefaultAsync();
+            return query.FirstOrDefault();
         }
 
-        public async Task<IEnumerable<T>> GetAll()
+        public IEnumerable<T> GetAll()
         {
             IQueryable<T> query = dbSet;
 
-            return await query.ToListAsync();
+            return query.ToList();
         }
 
         public void Remove(T entity)

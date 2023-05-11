@@ -8,9 +8,5 @@ namespace Napa.BusinessLogic.IServices
 {
     public interface IService
     {
-        bool Delete(int id);
-
-        bool Exist(int id);
-
     }
 }

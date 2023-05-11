@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace Napa.BusinessLogic.IServices
 {
-    public interface ITestService : IService
+    public interface IBaseService : IService
     {
-        void DoSomething();
+        bool Delete(int id);
+
+        bool Exist(int id);
     }
 }

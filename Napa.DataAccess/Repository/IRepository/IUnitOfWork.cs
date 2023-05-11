@@ -9,8 +9,10 @@ namespace Napa.DataAccess.Repository.IRepository
 {
     public interface IUnitOfWork
     {
-        ITestRepository TestRepo { get; }
         IApplicationUserRepository ApplicationUserRepo { get; }
+        ICategoryRepository CategoryRepo { get; }
+        IAuthorRepository AuthorRepo { get; }
+        IBookRepository BookRepo { get; }
 
         void Save();
     }
