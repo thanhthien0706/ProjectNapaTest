@@ -87,7 +87,7 @@ namespace Napa.BusinessLogic
                 }
 
 
-                _unitOfWork.CategoryRepo.Update(category);
+                _unitOfWork.CategoryRepo.Update(oldData);
                 _unitOfWork.Save();
                 return true;
             }
